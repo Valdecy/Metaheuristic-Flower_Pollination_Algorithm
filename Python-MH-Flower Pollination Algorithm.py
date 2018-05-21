@@ -79,14 +79,12 @@ def flower_pollination_algorithm(flowers = 3, min_values = [-5,-5], max_values =
                 x = pollination_global(position, best_global, flower = i, gama = gama, lamb = lamb, min_values = min_values, max_values = max_values)
             else:
                 x = pollination_local(position, best_global, flower = i, nb_flower_1 = nb_flower_1, nb_flower_2 = nb_flower_2, min_values = min_values, max_values = max_values)
-            
-           
+                    
             if (x[-1] <= position.iloc[i,-1]):
                 for j in range(0, position.shape[1]):
                     position.iloc[i,j] = x[j]
             if (best_global[-1] > position.iloc[position['Fitness'].idxmin(),:][-1]):
-                best_global = position.iloc[position['Fitness'].idxmin(),:].copy(deep = True)  
-            
+                best_global = position.iloc[position['Fitness'].idxmin(),:].copy(deep = True)              
 
         count = count + 1 
         
