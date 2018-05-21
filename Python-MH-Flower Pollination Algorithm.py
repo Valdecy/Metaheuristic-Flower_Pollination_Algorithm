@@ -34,7 +34,6 @@ def levy_flight(mean):
 	x2 = math.pow((math.cos((2.0 - mean)*(random.uniform(-0.5*math.pi, 0.5*math.pi)))/(-math.log(random.uniform(0.0, 1.0)))), ((2.0 - mean)/(mean - 1.0)))
 	return x1*x2
 
-
 # Function: Global Pollination
 def pollination_global(position, best_global, flower = 0, gama = 0.5, lamb = 1.4, min_values = [-5,-5], max_values = [5,5]):
     x = best_global.copy(deep = True)
