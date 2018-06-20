@@ -14,6 +14,7 @@
 # Required Libraries
 import pandas as pd
 import numpy  as np
+import scipy
 import math
 import random
 import os
@@ -28,11 +29,16 @@ def initial_position(flowers = 3, min_values = [-5,-5], max_values = [5,5]):
         position.iloc[i,-1] = target_function(position.iloc[i,0:position.shape[1]-1])
     return position
 
-# Function: Levy Distribution
-def levy_flight(mean):
-	x1 = math.sin((mean - 1.0)*(random.uniform(-0.5*math.pi, 0.5*math.pi)) )/(math.pow(math.cos((random.uniform(-0.5*math.pi, 0.5*math.pi))), (1.0/(mean - 1.0))))
-	x2 = math.pow((math.cos((2.0 - mean)*(random.uniform(-0.5*math.pi, 0.5*math.pi)))/(-math.log(random.uniform(0.0, 1.0)))), ((2.0 - mean)/(mean - 1.0)))
-	return x1*x2
+#Function Levy Distribution
+def levy_flight(beta = 1.5):
+    beta = beta  
+    r1 = int.from_bytes(os.urandom(8), byteorder = "big") / ((1 << 64) - 1)
+    r2 = int.from_bytes(os.urandom(8), byteorder = "big") / ((1 << 64) - 1)
+    sig_num = scipy.special.gamma(1+beta)*np.sin((np.pi*beta)/2.0)
+    sig_den = scipy.special.gamma((1+beta)/2)*beta*2**((beta-1)/2)
+    sigma = (sig_num/sig_den)**(1/beta)
+    levy = (0.01*r1*sigma)/(abs(r2)**(1/beta))
+    return levy
 
 # Function: Global Pollination
 def pollination_global(position, best_global, flower = 0, gama = 0.5, lamb = 1.4, min_values = [-5,-5], max_values = [5,5]):
@@ -97,4 +103,4 @@ def target_function (variables_values = [0, 0]):
     func_value = 4*variables_values[0]**2 - 2.1*variables_values[0]**4 + (1/3)*variables_values[0]**6 + variables_values[0]*variables_values[1] - 4*variables_values[1]**2 + 4*variables_values[1]**4
     return func_value
 
-fpa = flower_pollination_algorithm(flowers = 25, min_values = [-5,-5], max_values = [5,5], iterations = 50, gama = 0.1, lamb = 1.5, p = 0.8)
+fpa = flower_pollination_algorithm(flowers = 25, min_values = [-5,-5], max_values = [5,5], iterations = 500, gama = 0.1, lamb = 1.5, p = 0.8)
